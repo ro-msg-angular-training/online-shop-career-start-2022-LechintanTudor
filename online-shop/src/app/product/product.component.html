@@ -1,15 +1,17 @@
 <div id="container">
-    <div id="image-container">
-        <img id="image" src="{{ product.image }}">
+    <div id="name-image-container">
+        <span id="name">{{ product.name }}</span>
+        <div id="image-container">
+            <img id="image" src="{{ product.image }}">
+        </div> 
     </div>
     <div id="details-container">
         <span id="id-label">Id:</span>
         <span id="id-value">{{ product.id }}</span>
-        <span id="name-label">Name:</span>
-        <span id="name-value">{{ product.name }}</span>
         <span id="category-label">Category:</span>
         <span id="category-value">{{ product.category }}</span>
         <span id="description-label">Description:</span>
         <span id="description-value">{{ product.description }}</span>
     </div>
+    <button id="add-to-cart" (click)="addToCart()">Add to cart</button>
 </div>

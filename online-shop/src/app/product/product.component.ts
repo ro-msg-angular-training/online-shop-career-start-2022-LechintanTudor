@@ -1,20 +1,41 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Product } from '../data/product';
+import { ProductService } from '../services/product.service';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss']
 })
-export class ProductComponent {
+export class ProductComponent implements OnInit {
   product: Product = {
-    id: 1,
-    name: 'My Product',
-    category: 'My Category',
-    price: 69420,
-    image: 'https://media.wired.com/photos/5e1e646743940d0008009167/1:1/w_1533,h_1533,c_limit/Science_Cats-84873657.jpg',
-    description: 'A very good product',
+    id: 0,
+    name: '-----',
+    category: '-----',
+    price: 0,
+    image: '',
+    description: '-----',
   };
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private productService: ProductService,
+  ) { }
+  
+  ngOnInit(): void {
+    this.getProduct();
+  }
+  
+  getProduct(): void {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+
+    this.productService.getProduct(id).subscribe(product => {
+      this.product = product;
+    });
+  }
+  
+  addToCart(): void {
+    alert('Product added to cart!');
+  }
 }
