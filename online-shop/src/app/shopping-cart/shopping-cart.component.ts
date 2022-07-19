@@ -5,7 +5,7 @@ import { ProductService } from '../services/product.service';
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
-  styleUrls: ['./shopping-cart.component.scss']
+  styleUrls: ['./shopping-cart.component.scss'],
 })
 export class ShoppingCartComponent implements OnInit {
   orders: Order[] = [];
@@ -15,8 +15,10 @@ export class ShoppingCartComponent implements OnInit {
   ngOnInit(): void {
     this.orders = this.productService.getOrders();
   }
-  
+
   checkout(): void {
-    this.productService.checkout().subscribe(() => alert('Completed checkout!'));
+    this.productService
+      .checkout()
+      .subscribe(() => alert('Completed checkout!'));
   }
 }

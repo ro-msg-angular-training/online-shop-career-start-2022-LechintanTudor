@@ -1,21 +1,21 @@
 #container {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
 
 #navbar {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 30px;
-    padding: 10px;
-    background-color: lightblue;
-    border: 2px solid gray;
-    border-radius: 10px;
-    box-shadow: 0 3px 3px 3px lightgray;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 30px;
+  padding: 10px;
+  background-color: lightblue;
+  border: 2px solid gray;
+  border-radius: 10px;
+  box-shadow: 0 3px 3px 3px lightgray;
 }
 
 #content {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }

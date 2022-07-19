@@ -1,46 +1,47 @@
 #container {
-    border: 2px solid black;
-    border-radius: 10px;
-    display: grid;
-    grid-template-areas:
-        "title"
-        "content";
-    grid-template-rows: auto 1fr;
-    width: 800px;
-    box-shadow: 0 3px 3px 3px lightgray;
+  border: 2px solid black;
+  border-radius: 10px;
+  display: grid;
+  grid-template-areas:
+    "title"
+    "content";
+  grid-template-rows: auto 1fr;
+  width: 800px;
+  box-shadow: 0 3px 3px 3px lightgray;
 }
 
 h1 {
-    grid-area: title;
-    text-align: center;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    background-color: lightblue;
-    margin: 10px;
-    padding: 10px;
+  grid-area: title;
+  text-align: center;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-color: lightblue;
+  margin: 10px;
+  padding: 10px;
 }
 
 table {
-    table-layout: fixed;
-    grid-area: content;
-    border: 2px solid black;
-    border-collapse: collapse;
-    margin: 10px;
+  table-layout: fixed;
+  grid-area: content;
+  border: 2px solid black;
+  border-collapse: collapse;
+  margin: 10px;
 }
 
 th {
-    background-color: lightgray;
+  background-color: lightgray;
 }
 
-td, th {
-    border: 2px solid black;
-    border-collapse: collapse;
-    padding: 4px;
+td,
+th {
+  border: 2px solid black;
+  border-collapse: collapse;
+  padding: 4px;
 }
 
 .delete-button {
-    background-color: rgb(220, 50, 50);
-    color: white;
-    cursor: pointer;
-    text-align: center;
+  background-color: rgb(220, 50, 50);
+  color: white;
+  cursor: pointer;
+  text-align: center;
 }

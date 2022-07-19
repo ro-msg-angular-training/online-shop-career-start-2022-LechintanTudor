@@ -1,56 +1,55 @@
 #container {
-    border: 2px solid gray;
-    border-radius: 10px;
-    padding: 10px;
-    width: 300px;
-    display: grid;
-    grid-template:
-        "name-image"
-        "details"
-        "add-to-cart";
-    grid-template-rows:  auto auto 1fr;
-    box-shadow: 0 3px 3px 3px lightgray
+  border: 2px solid gray;
+  border-radius: 10px;
+  padding: 10px;
+  width: 300px;
+  display: grid;
+  grid-template:
+    "name-image"
+    "details"
+    "add-to-cart";
+  grid-template-rows: auto auto 1fr;
+  box-shadow: 0 3px 3px 3px lightgray;
 }
-
 
 ////////////////////////////////////////
 // Name/Image container
 ////////////////////////////////////////
 
 #name-image-container {
-    grid-area: name-image;
-    margin-bottom: 0;
-    display: grid;
-    grid-template:
-        "name"
-        "image";
-    grid-template-rows: 50px 1fr;
-    border: 2px solid gray;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+  grid-area: name-image;
+  margin-bottom: 0;
+  display: grid;
+  grid-template:
+    "name"
+    "image";
+  grid-template-rows: 50px 1fr;
+  border: 2px solid gray;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 #name {
-    grid-area: name;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: lightblue;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+  grid-area: name;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: lightblue;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
 }
 
 #image-container {
-    grid-area: image;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px;
+  grid-area: image;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
 }
 
 img {
-    max-width: 100%;
-    max-height: 100%;
+  max-width: 100%;
+  max-height: 100%;
 }
 
 ////////////////////////////////////////
@@ -58,61 +57,61 @@ img {
 ////////////////////////////////////////
 
 #details-container {
-    grid-area: details;
-    margin: 10px 0;
-    display: grid;
-    grid-template:
-        "id-label id-value"
-        "name-label name-value"
-        "category-label category-value"
-        "description-label description-value";
-    grid-template-columns: auto 1fr;
-    grid-template-rows: repeat(3, 30px), auto;
+  grid-area: details;
+  margin: 10px 0;
+  display: grid;
+  grid-template:
+    "id-label id-value"
+    "name-label name-value"
+    "category-label category-value"
+    "description-label description-value";
+  grid-template-columns: auto 1fr;
+  grid-template-rows: repeat(3, 30px), auto;
 }
 
 #id-label {
-    grid-area: id-label;
-    padding: 4px;
+  grid-area: id-label;
+  padding: 4px;
 }
 
 #id-value {
-    grid-area: id-value;
-    padding: 4px;
+  grid-area: id-value;
+  padding: 4px;
 }
 
 #name-label {
-    grid-area: name-label;
-    padding: 4px;
+  grid-area: name-label;
+  padding: 4px;
 }
 
 #name-value {
-    grid-area: name-value;
-    padding: 4px;
+  grid-area: name-value;
+  padding: 4px;
 }
 
 #name-value {
-    grid-area: name-value;
-    padding: 4px;
+  grid-area: name-value;
+  padding: 4px;
 }
 
 #category-label {
-    grid-area: category-label;
-    padding: 4px;
+  grid-area: category-label;
+  padding: 4px;
 }
 
 #category-value {
-    grid-area: category-value;
-    padding: 4px;
+  grid-area: category-value;
+  padding: 4px;
 }
 
 #description-label {
-    grid-area: description-label;
-    padding: 4px;
+  grid-area: description-label;
+  padding: 4px;
 }
 
 #description-value {
-    grid-area: description-value;
-    padding: 4px;
+  grid-area: description-value;
+  padding: 4px;
 }
 
 ////////////////////////////////////////
@@ -120,14 +119,14 @@ img {
 ////////////////////////////////////////
 
 #add-to-cart {
-    grid-area: add-to-cart;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40px;
-    cursor: pointer;
-    background-color: lightgreen;
-    border: 2px solid gray;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+  grid-area: add-to-cart;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40px;
+  cursor: pointer;
+  background-color: lightgreen;
+  border: 2px solid gray;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }

@@ -15,14 +15,10 @@ import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
     ProductComponent,
     ProductListComponent,
     PageNotFoundComponent,
-    ShoppingCartComponent
+    ShoppingCartComponent,
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule
-  ],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
