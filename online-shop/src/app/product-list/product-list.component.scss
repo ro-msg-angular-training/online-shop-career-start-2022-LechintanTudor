@@ -37,3 +37,10 @@ td, th {
     border-collapse: collapse;
     padding: 4px;
 }
+
+.delete-button {
+    background-color: rgb(220, 50, 50);
+    color: white;
+    cursor: pointer;
+    text-align: center;
+}
