@@ -35,7 +35,8 @@ export class ProductComponent implements OnInit {
     });
   }
   
-  addToCart(): void {
-    alert('Product added to cart!');
+  addToCart(productId: number): void {
+    this.productService.addToCart(productId);
+    alert('Product added to cart');
   }
 }
