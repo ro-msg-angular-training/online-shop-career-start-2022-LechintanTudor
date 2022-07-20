@@ -1,0 +1,32 @@
+#login-form {
+  display: grid;
+  grid-template-rows: auto 30px 30px auto;
+  grid-template-columns: auto 1fr;
+  row-gap: 6px;
+  column-gap: 6px;
+
+  width: 300px;
+  padding: 10px;
+
+  border: 2px solid lightgray;
+  border-radius: 10px;
+
+  box-shadow: 0 3px 3px 3px lightgray;
+}
+
+#title {
+  grid-column: 1 / 3;
+
+  padding: 10px;
+
+  text-align: center;
+  font-size: larger;
+
+  background-color: lightblue;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+#login-button {
+  grid-column: 1 / 3;
+}

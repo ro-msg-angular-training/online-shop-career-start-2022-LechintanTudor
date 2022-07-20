@@ -2,12 +2,14 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AddProductFormComponent } from './add-product-form/add-product-form.component';
 import { EditProductFormComponent } from './edit-product-form/edit-product-form.component';
+import { LoginFormComponent } from './login-form/login-form.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ProductListComponent } from './product-list/product-list.component';
 import { ProductComponent } from './product/product.component';
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 
 const routes: Routes = [
+  { path: 'login', component: LoginFormComponent },
   { path: 'products', component: ProductListComponent },
   { path: 'products/:id', component: ProductComponent },
   { path: 'add-product', component: AddProductFormComponent },
