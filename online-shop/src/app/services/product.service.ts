@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Order } from '../data/order';
 import { Product } from '../data/product';
 import { API_BASE_URL } from './common';
@@ -21,6 +21,10 @@ export class ProductService {
     return this.http.get<Product>(`${API_BASE_URL}/products/${id}`);
   }
 
+  updateProduct(product: Product): Observable<void> {
+    return this.http.put<void>(`${API_BASE_URL}/products/${product.id}`, product);
+  }
+
   deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(`${API_BASE_URL}/products/${id}`);
   }
@@ -39,11 +43,13 @@ export class ProductService {
     return this.orders;
   }
 
-  checkout() {
+  checkout(): Observable<void> {
     const data = { customer: 'doej', products: this.orders };
 
-    return this.http.post(`${API_BASE_URL}/orders`, data, {
-      responseType: 'text',
-    });
+    return this.http
+      .post(`${API_BASE_URL}/orders`, data, {
+        responseType: 'text',
+      })
+      .pipe(map(() => {}));
   }
 }

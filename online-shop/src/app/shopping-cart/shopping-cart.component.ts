@@ -17,8 +17,6 @@ export class ShoppingCartComponent implements OnInit {
   }
 
   checkout(): void {
-    this.productService
-      .checkout()
-      .subscribe(() => alert('Completed checkout!'));
+    this.productService.checkout().subscribe(() => alert('Completed checkout!'));
   }
 }

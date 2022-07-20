@@ -7,7 +7,7 @@
   grid-template:
     "name-image"
     "details"
-    "add-to-cart";
+    "button-container";
   grid-template-rows: auto auto 1fr;
   box-shadow: 0 3px 3px 3px lightgray;
 }
@@ -60,73 +60,26 @@ img {
   grid-area: details;
   margin: 10px 0;
   display: grid;
-  grid-template:
-    "id-label id-value"
-    "name-label name-value"
-    "category-label category-value"
-    "description-label description-value";
   grid-template-columns: auto 1fr;
   grid-template-rows: repeat(3, 30px), auto;
 }
 
-#id-label {
-  grid-area: id-label;
-  padding: 4px;
-}
-
-#id-value {
-  grid-area: id-value;
-  padding: 4px;
-}
-
-#name-label {
-  grid-area: name-label;
-  padding: 4px;
-}
-
-#name-value {
-  grid-area: name-value;
-  padding: 4px;
-}
-
-#name-value {
-  grid-area: name-value;
-  padding: 4px;
-}
-
-#category-label {
-  grid-area: category-label;
-  padding: 4px;
-}
-
-#category-value {
-  grid-area: category-value;
-  padding: 4px;
-}
-
-#description-label {
-  grid-area: description-label;
-  padding: 4px;
-}
-
-#description-value {
-  grid-area: description-value;
+#details-container span {
   padding: 4px;
 }
 
 ////////////////////////////////////////
-// Add to cart
+// Button container
 ////////////////////////////////////////
 
-#add-to-cart {
-  grid-area: add-to-cart;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 40px;
-  cursor: pointer;
-  background-color: lightgreen;
-  border: 2px solid gray;
+#button-container {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  row-gap: 4px;
+}
+
+#button-container:last-child {
+  color: yellow;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
