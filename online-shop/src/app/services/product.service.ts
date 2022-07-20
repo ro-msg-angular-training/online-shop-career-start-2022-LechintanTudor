@@ -13,6 +13,10 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
+  addProduct(product: Product): Observable<Product> {
+    return this.http.post<Product>(`${API_BASE_URL}/products`, product);
+  }
+
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(`${API_BASE_URL}/products`);
   }

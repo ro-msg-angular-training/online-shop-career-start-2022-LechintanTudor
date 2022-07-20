@@ -1,23 +1,28 @@
 #container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
   border: 2px solid black;
   border-radius: 10px;
-  display: grid;
-  grid-template-areas:
-    "title"
-    "content";
-  grid-template-rows: auto 1fr;
+
   width: 800px;
   box-shadow: 0 3px 3px 3px lightgray;
 }
 
 h1 {
-  grid-area: title;
   text-align: center;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   background-color: lightblue;
   margin: 10px;
   padding: 10px;
+}
+
+#add-product-button {
+  margin: 10px;
+
+  text-align: center;
 }
 
 table {

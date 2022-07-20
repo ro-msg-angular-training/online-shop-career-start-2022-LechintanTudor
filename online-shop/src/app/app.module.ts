@@ -10,6 +10,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 import { ShoppingCartComponent } from './shopping-cart/shopping-cart.component';
 import { EditProductFormComponent } from './edit-product-form/edit-product-form.component';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AddProductFormComponent } from './add-product-form/add-product-form.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     PageNotFoundComponent,
     ShoppingCartComponent,
     EditProductFormComponent,
+    AddProductFormComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule],
   providers: [],
