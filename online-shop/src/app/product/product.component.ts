@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from '../data/product';
+import { AuthService } from '../services/auth.service';
 import { ProductService } from '../services/product.service';
 
 @Component({
@@ -18,9 +19,13 @@ export class ProductComponent implements OnInit {
     description: '-----',
   };
 
+  canEditProduct = this.authService.userHasRole('admin');
+  canAddToCart = this.authService.userHasRole('customer');
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
+    private authService: AuthService,
     private productService: ProductService
   ) {}
 

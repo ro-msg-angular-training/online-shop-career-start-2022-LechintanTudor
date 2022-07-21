@@ -14,7 +14,11 @@
     <span>{{ product.description }}</span>
   </div>
   <div id="button-container">
-    <button id="edit-button" (click)="editProduct()">Edit details</button>
-    <button id="add-to-cart-button" (click)="addToCart()">Add to cart</button>
+    <button id="edit-button" [disabled]="!canEditProduct" (click)="editProduct()">
+      Edit details
+    </button>
+    <button id="add-to-cart-button" [disabled]="!canAddToCart" (click)="addToCart()">
+      Add to cart
+    </button>
   </div>
 </div>

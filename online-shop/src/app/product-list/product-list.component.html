@@ -1,6 +1,8 @@
 <div id="container">
   <h1 id="title">Products</h1>
-  <button id="add-product-button" (click)="addProduct()">Add product</button>
+  <button id="add-product-button" [disabled]="!canEditProducts" (click)="addProduct()">
+    Add product
+  </button>
   <table>
     <thead>
       <th>Id</th>
@@ -17,7 +19,9 @@
         <td>{{ product.category }}</td>
         <td>{{ product.price }}</td>
         <td><a routerLink="/products/{{ product.id }}">Details...</a></td>
-        <td class="delete-button" (click)="deleteProduct(product.id)">DELETE</td>
+        <td>
+          <button [disabled]="!canEditProducts" (click)="deleteProduct(product.id)">Delete</button>
+        </td>
       </tr>
     </tbody>
   </table>

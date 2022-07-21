@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Product } from '../data/product';
+import { AuthService } from '../services/auth.service';
 import { ProductService } from '../services/product.service';
 
 @Component({
@@ -10,8 +11,13 @@ import { ProductService } from '../services/product.service';
 })
 export class ProductListComponent implements OnInit {
   products: Product[] = [];
+  canEditProducts: boolean = this.authService.userHasRole('admin');
 
-  constructor(private router: Router, private productService: ProductService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private productService: ProductService
+  ) {}
 
   ngOnInit(): void {
     this.getProducts();
