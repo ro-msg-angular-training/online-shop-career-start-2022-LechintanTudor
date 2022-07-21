@@ -14,7 +14,7 @@ import { AuthService } from '../services/auth.service';
 export class CustomerAuthGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree {
+  canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): true | UrlTree {
     if (this.authService.userHasRole('customer')) {
       return true;
     } else {

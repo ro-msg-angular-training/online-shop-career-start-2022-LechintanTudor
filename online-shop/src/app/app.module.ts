@@ -12,6 +12,7 @@ import { EditProductFormComponent } from './edit-product-form/edit-product-form.
 import { ReactiveFormsModule } from '@angular/forms';
 import { AddProductFormComponent } from './add-product-form/add-product-form.component';
 import { LoginFormComponent } from './login-form/login-form.component';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,13 @@ import { LoginFormComponent } from './login-form/login-form.component';
     AddProductFormComponent,
     LoginFormComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule, ReactiveFormsModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    StoreModule.forRoot({}, {}),
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
