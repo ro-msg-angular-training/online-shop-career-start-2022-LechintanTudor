@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { Product } from 'src/app/data/product';
 import { LoadingStatus } from '../common';
-import { getProducts } from './product.actions';
+import { getProducts, getProductsError, getProductsSuccess } from './product.actions';
 
 export interface ProductState {
   products: Product[];
@@ -18,5 +18,14 @@ export const productReducer = createReducer(
   on(getProducts, (state) => ({
     ...state,
     status: 'loading',
+  })),
+  on(getProductsSuccess, (state, { products }) => ({
+    ...state,
+    products,
+    status: 'ready',
+  })),
+  on(getProductsError, (state) => ({
+    ...state,
+    status: 'error',
   }))
 );

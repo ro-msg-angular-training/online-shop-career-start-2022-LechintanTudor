@@ -6,19 +6,21 @@ export const addProduct = createAction(
   props<{ product: Product }>()
 );
 
-export const getProducts = createAction('[Product List] Load products');
+export const getProducts = createAction('[Product List] Get Products');
 
 export const getProductsSuccess = createAction(
-  '[API] Get Products',
+  '[API] Get Products Success',
   props<{ products: Product[] }>()
 );
 
+export const getProductsError = createAction('[API] Get Products Error');
+
 export const updateProduct = createAction(
-  '[Edit Product Form] Edit product',
+  '[Edit Product Form] Edit Product',
   props<{ product: Product }>()
 );
 
 export const deleteProduct = createAction(
-  '[Product List] Delete product',
+  '[Product List] Delete Product',
   props<{ productId: number }>()
 );

@@ -5,3 +5,8 @@ export interface User {
   fullName: string;
   roles: UserRole[];
 }
+
+export interface Credentials {
+  username: string;
+  password: string;
+}

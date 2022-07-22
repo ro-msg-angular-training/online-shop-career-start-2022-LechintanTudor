@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
-
+import { EffectsModule } from '@ngrx/effects';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProductComponent } from './product/product.component';
@@ -13,6 +13,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { AddProductFormComponent } from './add-product-form/add-product-form.component';
 import { LoginFormComponent } from './login-form/login-form.component';
 import { StoreModule } from '@ngrx/store';
+import { productReducer } from './state/products/product.reducer';
+import { ProductEffects } from './state/products/product.effects';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,8 @@ import { StoreModule } from '@ngrx/store';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot({ products: productReducer }),
+    EffectsModule.forRoot([ProductEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],
