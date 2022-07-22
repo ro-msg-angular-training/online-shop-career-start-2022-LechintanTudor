@@ -2,6 +2,7 @@ import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { take } from 'rxjs';
 import { Product } from '../data/product';
 import { ProductService } from '../services/product.service';
 
@@ -32,6 +33,7 @@ export class EditProductFormComponent implements OnInit {
 
     this.productService
       .getProduct(this.productId)
+      .pipe(take(1))
       .subscribe((product) => this.detailsForm.patchValue(product));
   }
 

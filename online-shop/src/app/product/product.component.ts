@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { take } from 'rxjs';
 import { Product } from '../data/product';
 import { AuthService } from '../services/auth.service';
 import { ProductService } from '../services/product.service';
@@ -36,9 +37,12 @@ export class ProductComponent implements OnInit {
   getProduct(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.productService.getProduct(id).subscribe((product) => {
-      this.product = product;
-    });
+    this.productService
+      .getProduct(id)
+      .pipe(take(1))
+      .subscribe((product) => {
+        this.product = product;
+      });
   }
 
   editProduct(): void {

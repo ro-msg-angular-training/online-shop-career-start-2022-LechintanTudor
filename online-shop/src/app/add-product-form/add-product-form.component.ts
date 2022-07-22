@@ -1,6 +1,7 @@
-import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+import { take } from 'rxjs';
 import { Product } from '../data/product';
 import { ProductService } from '../services/product.service';
 
@@ -20,7 +21,7 @@ export class AddProductFormComponent {
 
   constructor(
     private fb: FormBuilder,
-    private location: Location,
+    private router: Router,
     private productService: ProductService
   ) {}
 
@@ -34,18 +35,21 @@ export class AddProductFormComponent {
       description: this.detailsForm.value.description ?? '',
     };
 
-    this.productService.addProduct(product).subscribe({
-      next: (product) => {
-        alert(`Successfully added product with id=${product.id}`);
-        this.location.back();
-      },
-      error: () => {
-        alert(`Failed to add product`);
-      },
-    });
+    this.productService
+      .addProduct(product)
+      .pipe(take(1))
+      .subscribe({
+        next: (product) => {
+          alert(`Successfully added product with id=${product.id}`);
+          this.router.navigateByUrl('/products');
+        },
+        error: () => {
+          alert('Failed to add product');
+        },
+      });
   }
 
   cancel(): void {
-    this.location.back();
+    this.router.navigateByUrl('/products');
   }
 }

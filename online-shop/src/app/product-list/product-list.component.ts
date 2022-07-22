@@ -15,7 +15,7 @@ import * as ProductSelectors from '../state/products/product.selectors';
 })
 export class ProductListComponent implements OnInit {
   products$ = this.store.select(ProductSelectors.selectProducts);
-  canEditProducts: boolean = this.authService.userHasRole('admin');
+  canEditProducts = false;
 
   constructor(
     private router: Router,
@@ -25,6 +25,7 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(ProductActions.getProducts());
+    this.canEditProducts = this.authService.userHasRole('admin');
   }
 
   addProduct(): void {

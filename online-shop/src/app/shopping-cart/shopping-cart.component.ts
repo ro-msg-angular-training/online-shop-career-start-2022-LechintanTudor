@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { take } from 'rxjs';
 import { Order } from '../data/order';
 import { AuthService } from '../services/auth.service';
 import { ProductService } from '../services/product.service';
@@ -10,16 +11,19 @@ import { ProductService } from '../services/product.service';
 })
 export class ShoppingCartComponent implements OnInit {
   orders: Order[] = [];
-  canCheckout = this.authService.userHasRole('customer');
+  canCheckout = false;
 
   constructor(private productService: ProductService, private authService: AuthService) {}
 
   ngOnInit(): void {
     this.orders = this.productService.getOrders();
-    this.canCheckout &&= this.orders.length !== 0;
+    this.canCheckout = this.orders.length !== 0 && this.authService.userHasRole('customer');
   }
 
   checkout(): void {
-    this.productService.checkout().subscribe(() => alert('Completed checkout!'));
+    this.productService
+      .checkout()
+      .pipe(take(1))
+      .subscribe(() => alert('Completed checkout!'));
   }
 }
