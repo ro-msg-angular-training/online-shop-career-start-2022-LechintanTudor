@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { select, Store } from '@ngrx/store';
-import { Product } from '../data/product';
+import { Store } from '@ngrx/store';
 import { AuthService } from '../services/auth.service';
-import { ProductService } from '../services/product.service';
 import { AppState } from '../state/app.state';
 import * as ProductActions from '../state/products/product.actions';
 import * as ProductSelectors from '../state/products/product.selectors';
@@ -28,14 +26,8 @@ export class ProductListComponent implements OnInit {
     this.canEditProducts = this.authService.userHasRole('admin');
   }
 
-  addProduct(): void {
+  goToAddProductForm(): void {
     this.router.navigateByUrl('/add-product');
-  }
-
-  getProducts(): void {
-    // this.productService.getProducts().subscribe((products) => {
-    //   this.products = products;
-    // });
   }
 
   deleteProduct(productId: number): void {

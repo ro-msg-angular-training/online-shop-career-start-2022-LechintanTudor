@@ -8,6 +8,30 @@ import { catchError, map, mergeMap, of } from 'rxjs';
   providedIn: 'root',
 })
 export class ProductEffects {
+  addProduct$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ProductActions.addProduct),
+      mergeMap(({ product }) => {
+        return this.productService.addProduct(product).pipe(
+          map((product) => ProductActions.addProductSuccess({ product })),
+          catchError(() => of(ProductActions.getProductError()))
+        );
+      })
+    );
+  });
+
+  getProduct$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ProductActions.getProduct),
+      mergeMap(({ productId }) => {
+        return this.productService.getProduct(productId).pipe(
+          map((product) => ProductActions.getProductSuccess({ product })),
+          catchError(() => of(ProductActions.getProductError()))
+        );
+      })
+    );
+  });
+
   getProducts$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ProductActions.getProducts),
@@ -20,11 +44,17 @@ export class ProductEffects {
     );
   });
 
-  // saveProducts$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType()
-  //   ),
-  // });
+  updateProduct$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ProductActions.updateProduct),
+      mergeMap(({ product }) => {
+        return this.productService.updateProduct(product).pipe(
+          map(() => ProductActions.updateProductSuccess({ product })),
+          catchError(() => of(ProductActions.updateProductError()))
+        );
+      })
+    );
+  });
 
   constructor(private actions$: Actions, private productService: ProductService) {}
 }

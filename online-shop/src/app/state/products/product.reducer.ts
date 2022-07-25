@@ -1,30 +1,80 @@
 import { createReducer, on } from '@ngrx/store';
 import { Product } from 'src/app/data/product';
 import { LoadingStatus } from '../common';
-import { getProducts, getProductsError, getProductsSuccess } from './product.actions';
+import * as ProductActions from './product.actions';
 
 export interface ProductState {
-  products: Product[];
   status: LoadingStatus;
+  products: Product[];
+  selectedProduct: Product | null;
 }
 
 const initialState: ProductState = {
-  products: [],
   status: 'initial',
+  products: [],
+  selectedProduct: null,
 };
 
 export const productReducer = createReducer(
   initialState,
-  on(getProducts, (state) => ({
+  // Add product
+  on(ProductActions.addProduct, (state) => ({
     ...state,
     status: 'loading',
   })),
-  on(getProductsSuccess, (state, { products }) => ({
+  on(ProductActions.addProductSuccess, (state, { product }) => ({
     ...state,
-    products,
-    status: 'ready',
+    status: 'loading',
+    products: [...state.products, product],
   })),
-  on(getProductsError, (state) => ({
+  on(ProductActions.addProductError, (state) => ({
+    ...state,
+    status: 'error',
+  })),
+
+  // Get product
+  on(ProductActions.getProduct, (state) => ({
+    ...state,
+    status: 'loading',
+  })),
+  on(ProductActions.getProductSuccess, (state, { product }) => ({
+    ...state,
+    status: 'ready',
+    selectedProduct: product,
+  })),
+  on(ProductActions.getProductError, (state) => ({
+    ...state,
+    status: 'error',
+  })),
+
+  // Get products
+  on(ProductActions.getProducts, (state) => ({
+    ...state,
+    status: 'loading',
+  })),
+  on(ProductActions.getProductsSuccess, (state, { products }) => ({
+    ...state,
+    status: 'ready',
+    products,
+  })),
+  on(ProductActions.getProductsError, (state) => ({
+    ...state,
+    status: 'error',
+  })),
+
+  // Update product
+  on(ProductActions.updateProduct, (state) => ({
+    ...state,
+    status: 'loading',
+  })),
+  on(ProductActions.updateProductSuccess, (state, { product }) => ({
+    ...state,
+    status: 'ready',
+    products: state.products.map((oldProduct) => {
+      return oldProduct.id === product.id ? product : oldProduct;
+    }),
+  })),
+  on(ProductActions.updateProductError, (state) => ({
     ...state,
     status: 'error',
   }))

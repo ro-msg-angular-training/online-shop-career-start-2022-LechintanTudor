@@ -34,7 +34,7 @@ export class ProductService {
   }
 
   addToCart(productId: number): void {
-    let order = this.orders.find((order) => order.productId === productId);
+    const order = this.orders.find((order) => order.productId === productId);
 
     if (order !== undefined) {
       order.quantity += 1;
