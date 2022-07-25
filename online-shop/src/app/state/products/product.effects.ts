@@ -8,6 +8,8 @@ import { catchError, map, mergeMap, of } from 'rxjs';
   providedIn: 'root',
 })
 export class ProductEffects {
+  constructor(private actions$: Actions, private productService: ProductService) {}
+
   addProduct$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ProductActions.addProduct),
@@ -56,5 +58,15 @@ export class ProductEffects {
     );
   });
 
-  constructor(private actions$: Actions, private productService: ProductService) {}
+  deleteProduct$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(ProductActions.deleteProduct),
+      mergeMap(({ productId }) => {
+        return this.productService.deleteProduct(productId).pipe(
+          map(() => ProductActions.deleteProductSuccess({ productId })),
+          catchError(() => of(ProductActions.deleteProductError()))
+        );
+      })
+    );
+  });
 }

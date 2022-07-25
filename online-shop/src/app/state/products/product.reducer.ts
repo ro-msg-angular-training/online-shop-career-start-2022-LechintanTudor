@@ -17,6 +17,7 @@ const initialState: ProductState = {
 
 export const productReducer = createReducer(
   initialState,
+
   // Add product
   on(ProductActions.addProduct, (state) => ({
     ...state,
@@ -75,6 +76,21 @@ export const productReducer = createReducer(
     }),
   })),
   on(ProductActions.updateProductError, (state) => ({
+    ...state,
+    status: 'error',
+  })),
+
+  // Delete product
+  on(ProductActions.deleteProduct, (state) => ({
+    ...state,
+    status: 'loading',
+  })),
+  on(ProductActions.deleteProductSuccess, (state, { productId }) => ({
+    ...state,
+    status: 'ready',
+    products: state.products.filter((product) => product.id !== productId),
+  })),
+  on(ProductActions.deleteProductError, (state) => ({
     ...state,
     status: 'error',
   }))

@@ -62,7 +62,18 @@ export const updateProductSuccess = createAction(
 
 export const updateProductError = createAction('[API] Update Product Error');
 
+////////////////////////////////////////////////////////////////////////////////
+// Delete product
+////////////////////////////////////////////////////////////////////////////////
+
 export const deleteProduct = createAction(
   '[Product List] Delete Product',
   props<{ productId: number }>()
 );
+
+export const deleteProductSuccess = createAction(
+  '[API] Delete Product Success',
+  props<{ productId: number }>()
+);
+
+export const deleteProductError = createAction('[API] Delete Product Error');
