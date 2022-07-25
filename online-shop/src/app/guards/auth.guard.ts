@@ -6,20 +6,28 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { AuthService } from '../services/auth.service';
+import { Store } from '@ngrx/store';
+import { map, Observable } from 'rxjs';
+import { AppState } from '../state/app.state';
+import * as LoginActions from '../state/login/login.actions';
+import * as LoginSelectors from '../state/login/login.selectors';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private router: Router, private store: Store<AppState>) {}
 
-  canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): true | UrlTree {
-    if (this.authService.isLoggedIn()) {
-      return true;
-    } else {
-      this.authService.redirectUrl = state.url;
-      return this.router.parseUrl('/login');
-    }
+  canActivate(_: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<true | UrlTree> {
+    return this.store.select(LoginSelectors.isLoggedIn).pipe(
+      map((isLoggedIn) => {
+        if (isLoggedIn) {
+          return true;
+        } else {
+          this.store.dispatch(LoginActions.setRedirectUrl({ redirectUrl: state.url }));
+          return this.router.parseUrl('/login');
+        }
+      })
+    );
   }
 }

@@ -15,11 +15,6 @@ import * as ProductSelectors from '../state/products/product.selectors';
   styleUrls: ['./edit-product-form.component.scss'],
 })
 export class EditProductFormComponent implements OnInit, OnDestroy {
-  selectedProduct$ = this.store.select(ProductSelectors.selectSelectedProduct);
-  selectedProductSubscription: Subscription = new Subscription();
-  updateProductSuccessSubscription: Subscription = new Subscription();
-  updateProductErrorSubscription: Subscription = new Subscription();
-
   productId = -1;
   detailsForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
@@ -28,6 +23,11 @@ export class EditProductFormComponent implements OnInit, OnDestroy {
     image: ['', Validators.required],
     description: ['', Validators.required],
   });
+
+  selectedProduct$ = this.store.select(ProductSelectors.selectSelectedProduct);
+  selectedProductSubscription: Subscription = new Subscription();
+  updateProductSuccessSubscription: Subscription = new Subscription();
+  updateProductErrorSubscription: Subscription = new Subscription();
 
   constructor(
     private fb: FormBuilder,

@@ -17,7 +17,7 @@ export class ShoppingCartComponent implements OnInit {
 
   ngOnInit(): void {
     this.orders = this.productService.getOrders();
-    this.canCheckout = this.orders.length !== 0 && this.authService.userHasRole('customer');
+    // this.canCheckout = this.orders.length !== 0 && this.authService.userHasRole('customer');
   }
 
   checkout(): void {

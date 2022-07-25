@@ -1,37 +1,61 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { take } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { Actions, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { Subscription, withLatestFrom } from 'rxjs';
+import { Credentials } from '../data/user';
+import { AppState } from '../state/app.state';
+import * as LoginActions from '../state/login/login.actions';
+import * as LoginSelectors from '../state/login/login.selectors';
 
 @Component({
   selector: 'app-login-form',
   templateUrl: './login-form.component.html',
   styleUrls: ['./login-form.component.scss'],
 })
-export class LoginFormComponent {
+export class LoginFormComponent implements OnInit, OnDestroy {
   loginForm = this.fb.nonNullable.group({
     username: this.fb.control('', Validators.required),
     password: this.fb.control('', Validators.required),
   });
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+  loginSuccessSubscription = new Subscription();
+  loginErrorSubscription = new Subscription();
+
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private store: Store<AppState>,
+    private actions: Actions
+  ) {}
+
+  ngOnInit(): void {
+    this.loginSuccessSubscription = this.actions
+      .pipe(
+        ofType(LoginActions.loginSuccess),
+        withLatestFrom(this.store.select(LoginSelectors.selectRedirectUrl))
+      )
+      .subscribe(([_, redirectUrl]) => {
+        console.log(redirectUrl);
+        this.router.navigateByUrl(redirectUrl);
+      });
+
+    this.loginErrorSubscription = this.actions
+      .pipe(ofType(LoginActions.loginError))
+      .subscribe(() => alert('Failed to log in!'));
+  }
+
+  ngOnDestroy(): void {
+    this.loginSuccessSubscription.unsubscribe();
+    this.loginErrorSubscription.unsubscribe();
+  }
 
   logIn(): void {
     const username = this.loginForm.value.username ?? '';
     const password = this.loginForm.value.password ?? '';
+    const credentials: Credentials = { username, password };
 
-    this.authService
-      .login(username, password)
-      .pipe(take(1))
-      .subscribe({
-        next: () => {
-          const redirectUrl = this.authService.redirectUrl ?? '/products';
-          this.router.navigateByUrl(redirectUrl);
-        },
-        error: () => {
-          alert('Failed to log in!');
-        },
-      });
+    this.store.dispatch(LoginActions.login({ credentials }));
   }
 }

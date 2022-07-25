@@ -15,6 +15,8 @@ import { LoginFormComponent } from './login-form/login-form.component';
 import { StoreModule } from '@ngrx/store';
 import { productReducer } from './state/products/product.reducer';
 import { ProductEffects } from './state/products/product.effects';
+import { loginReducer } from './state/login/login.reducer';
+import { LoginEffects } from './state/login/login.effects';
 
 @NgModule({
   declarations: [
@@ -32,8 +34,8 @@ import { ProductEffects } from './state/products/product.effects';
     AppRoutingModule,
     HttpClientModule,
     ReactiveFormsModule,
-    StoreModule.forRoot({ products: productReducer }),
-    EffectsModule.forRoot([ProductEffects]),
+    StoreModule.forRoot({ login: loginReducer, products: productReducer }),
+    EffectsModule.forRoot([LoginEffects, ProductEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],

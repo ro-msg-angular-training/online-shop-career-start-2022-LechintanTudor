@@ -23,7 +23,7 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.dispatch(ProductActions.getProducts());
-    this.canEditProducts = this.authService.userHasRole('admin');
+    // this.canEditProducts = this.authService.userHasRole('admin');
   }
 
   goToAddProductForm(): void {
