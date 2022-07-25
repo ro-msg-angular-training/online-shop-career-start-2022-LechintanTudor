@@ -30,7 +30,7 @@ export class AddProductFormComponent {
       id: -1,
       name: this.detailsForm.value.name ?? '',
       category: this.detailsForm.value.category ?? '',
-      price: Number(this.detailsForm.value.price ?? 0),
+      price: this.detailsForm.value.price ?? 0,
       image: this.detailsForm.value.image ?? '',
       description: this.detailsForm.value.description ?? '',
     };

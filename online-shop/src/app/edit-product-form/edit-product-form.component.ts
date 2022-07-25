@@ -29,7 +29,7 @@ export class EditProductFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.productId = Number(this.route.snapshot.paramMap.get('id'));
+    this.productId = parseInt(this.route.snapshot.paramMap.get('id') ?? '', 10);
 
     this.productService
       .getProduct(this.productId)
@@ -42,7 +42,7 @@ export class EditProductFormComponent implements OnInit {
       id: this.productId,
       name: this.detailsForm.value.name ?? '',
       category: this.detailsForm.value.category ?? '',
-      price: Number(this.detailsForm.value.price ?? 0),
+      price: this.detailsForm.value.price ?? 0,
       image: this.detailsForm.value.image ?? '',
       description: this.detailsForm.value.description ?? '',
     };

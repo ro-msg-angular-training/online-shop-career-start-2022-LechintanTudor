@@ -35,7 +35,7 @@ export class ProductComponent implements OnInit {
   }
 
   getProduct(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const id = parseInt(this.route.snapshot.paramMap.get('id') ?? '', 10);
 
     this.productService
       .getProduct(id)
