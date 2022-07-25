@@ -1,0 +1,33 @@
+#container {
+  display: grid;
+  grid-template-areas:
+    "title"
+    "content";
+  grid-template-rows: auto 1fr auto;
+  width: 300px;
+  padding: 6px;
+  row-gap: 4px;
+  border: 2px solid lightgray;
+  border-radius: 10px;
+}
+
+#title {
+  grid-area: title;
+  text-align: center;
+  margin: 0;
+  padding: 6px;
+  background-color: lightblue;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+#content {
+  grid-area: content;
+}
+
+table,
+td,
+th {
+  border: 2px solid black;
+  border-collapse: collapse;
+}

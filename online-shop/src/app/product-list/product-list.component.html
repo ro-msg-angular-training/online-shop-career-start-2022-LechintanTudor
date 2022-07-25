@@ -1,0 +1,28 @@
+<div id="container">
+  <h1 id="title">Products</h1>
+  <button id="add-product-button" [disabled]="!canEditProducts" (click)="addProduct()">
+    Add product
+  </button>
+  <table>
+    <thead>
+      <th>Id</th>
+      <th>Name</th>
+      <th>Category</th>
+      <th>Price</th>
+      <th>Details</th>
+      <th>Delete</th>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products$ | async">
+        <td>{{ product.id }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.category }}</td>
+        <td>{{ product.price }}</td>
+        <td><a routerLink="/products/{{ product.id }}">Details...</a></td>
+        <td>
+          <button [disabled]="!canEditProducts" (click)="deleteProduct(product.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

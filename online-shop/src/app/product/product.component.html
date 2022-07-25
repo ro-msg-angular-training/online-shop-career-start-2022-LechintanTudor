@@ -1,0 +1,24 @@
+<div id="container">
+  <div id="name-image-container">
+    <span id="name">{{ product.name }}</span>
+    <div id="image-container">
+      <img id="image" src="{{ product.image }}" />
+    </div>
+  </div>
+  <div id="details-container">
+    <span>Id:</span>
+    <span>{{ product.id }}</span>
+    <span>Category:</span>
+    <span>{{ product.category }}</span>
+    <span>Description:</span>
+    <span>{{ product.description }}</span>
+  </div>
+  <div id="button-container">
+    <button id="edit-button" [disabled]="!canEditProduct" (click)="editProduct()">
+      Edit details
+    </button>
+    <button id="add-to-cart-button" [disabled]="!canAddToCart" (click)="addToCart()">
+      Add to cart
+    </button>
+  </div>
+</div>
