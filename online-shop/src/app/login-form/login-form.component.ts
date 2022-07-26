@@ -34,7 +34,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     this.loginSuccessSubscription = this.actions
       .pipe(ofType(loginSuccess), withLatestFrom(this.store.select(selectRedirectUrl)))
       .subscribe(([_, redirectUrl]) => {
-        console.log(redirectUrl);
         this.router.navigateByUrl(redirectUrl);
       });
 
