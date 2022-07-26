@@ -1,17 +1,25 @@
-import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { take } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Actions, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { Product } from '../data/product';
-import { ProductService } from '../services/product.service';
+import { AppState } from '../state/app.state';
+import {
+  getProduct,
+  updateProduct,
+  updateProductError,
+  updateProductSuccess,
+} from '../state/products/product.actions';
+import { selectSelectedProduct } from '../state/products/product.selectors';
 
 @Component({
   selector: 'app-edit-product-form',
   templateUrl: './edit-product-form.component.html',
   styleUrls: ['./edit-product-form.component.scss'],
 })
-export class EditProductFormComponent implements OnInit {
+export class EditProductFormComponent implements OnInit, OnDestroy {
   productId = -1;
   detailsForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
@@ -21,23 +29,49 @@ export class EditProductFormComponent implements OnInit {
     description: ['', Validators.required],
   });
 
+  selectedProduct$ = this.store.select(selectSelectedProduct);
+
+  selectedProductSubscription: Subscription = new Subscription();
+  updateProductSuccessSubscription: Subscription = new Subscription();
+  updateProductErrorSubscription: Subscription = new Subscription();
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
-    private location: Location,
-    private productService: ProductService
+    private router: Router,
+    private store: Store<AppState>,
+    private actions: Actions
   ) {}
 
   ngOnInit(): void {
-    this.productId = parseInt(this.route.snapshot.paramMap.get('id') ?? '', 10);
+    this.selectedProductSubscription = this.selectedProduct$.subscribe((product) => {
+      if (product) {
+        this.detailsForm.patchValue(product);
+      }
+    });
 
-    this.productService
-      .getProduct(this.productId)
-      .pipe(take(1))
-      .subscribe((product) => this.detailsForm.patchValue(product));
+    this.updateProductSuccessSubscription = this.actions
+      .pipe(ofType(updateProductSuccess))
+      .subscribe(() => {
+        alert('Product updated successfully!');
+        this.router.navigateByUrl('/products');
+      });
+
+    this.updateProductErrorSubscription = this.actions
+      .pipe(ofType(updateProductError))
+      .subscribe(() => alert('Failed to update product!'));
+
+    this.productId = parseInt(this.route.snapshot.paramMap.get('id') ?? '', 10);
+    this.store.dispatch(getProduct({ productId: this.productId }));
   }
 
-  applyEdits(): void {
+  ngOnDestroy(): void {
+    this.selectedProductSubscription.unsubscribe();
+    this.updateProductSuccessSubscription.unsubscribe();
+    this.updateProductErrorSubscription.unsubscribe();
+  }
+
+  submitEdits(): void {
     const product: Product = {
       id: this.productId,
       name: this.detailsForm.value.name ?? '',
@@ -47,18 +81,10 @@ export class EditProductFormComponent implements OnInit {
       description: this.detailsForm.value.description ?? '',
     };
 
-    this.productService.updateProduct(product).subscribe({
-      next: () => {
-        alert('Product updated successfully!');
-        this.location.back();
-      },
-      error: () => {
-        alert('Failed to update product');
-      },
-    });
+    this.store.dispatch(updateProduct({ product }));
   }
 
   cancelEdits(): void {
-    this.location.back();
+    this.router.navigateByUrl('/products');
   }
 }

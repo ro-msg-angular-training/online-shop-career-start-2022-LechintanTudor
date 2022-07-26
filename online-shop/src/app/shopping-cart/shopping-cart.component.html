@@ -7,7 +7,7 @@
       <th>Details</th>
     </thead>
     <tbody>
-      <tr *ngFor="let order of orders">
+      <tr *ngFor="let order of orders$ | async">
         <td>{{ order.productId }}</td>
         <td>{{ order.quantity }}</td>
         <td><a routerLink="/products/{{ order.productId }}">Details...</a></td>

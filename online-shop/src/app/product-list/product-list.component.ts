@@ -1,49 +1,56 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatTable } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { Product } from '../data/product';
-import { AuthService } from '../services/auth.service';
-import { ProductService } from '../services/product.service';
 import { AppState } from '../state/app.state';
-import * as ProductActions from '../state/products/product.actions';
-import * as ProductSelectors from '../state/products/product.selectors';
+import { selectLoggedInUser } from '../state/login/login.selectors';
+import { deleteProduct, getProducts } from '../state/products/product.actions';
+import { selectProducts } from '../state/products/product.selectors';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
-export class ProductListComponent implements OnInit {
-  products$ = this.store.select(ProductSelectors.selectProducts);
+export class ProductListComponent implements OnInit, OnDestroy {
+  @ViewChild(MatTable) productTable!: MatTable<Product>;
+  columnsToDisplay = ['id', 'name', 'category', 'price', 'details', 'delete'];
+
+  products: Product[] = [];
   canEditProducts = false;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private store: Store<AppState>
-  ) {}
+  products$ = this.store.select(selectProducts);
+  loggedInUser$ = this.store.select(selectLoggedInUser);
+
+  productsSubscription = new Subscription();
+  loggedInUserSubscription = new Subscription();
+
+  constructor(private router: Router, private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.store.dispatch(ProductActions.getProducts());
-    this.canEditProducts = this.authService.userHasRole('admin');
+    this.productsSubscription = this.products$.subscribe((products) => {
+      this.products = products;
+      // this.productTable.renderRows();
+    });
+    this.loggedInUserSubscription = this.loggedInUser$.subscribe((user) => {
+      this.canEditProducts = user?.roles.includes('admin') ?? false;
+    });
+
+    this.store.dispatch(getProducts());
   }
 
-  addProduct(): void {
+  ngOnDestroy(): void {
+    this.productsSubscription.unsubscribe();
+    this.loggedInUserSubscription.unsubscribe();
+  }
+
+  goToAddProductForm(): void {
     this.router.navigateByUrl('/add-product');
   }
 
-  getProducts(): void {
-    // this.productService.getProducts().subscribe((products) => {
-    //   this.products = products;
-    // });
-  }
-
   deleteProduct(productId: number): void {
-    // this.productService.deleteProduct(productId).subscribe(() => {
-    //   this.productService.getProducts().subscribe((products) => {
-    //     this.products = products;
-    //     alert(`Deleted product with id = ${productId}`);
-    //   });
-    // });
+    this.store.dispatch(deleteProduct({ productId }));
   }
 }

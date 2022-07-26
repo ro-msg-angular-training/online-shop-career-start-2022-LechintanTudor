@@ -1,16 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { take } from 'rxjs';
+import { Actions, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { Product } from '../data/product';
-import { ProductService } from '../services/product.service';
+import { AppState } from '../state/app.state';
+import { addProduct, addProductError, addProductSuccess } from '../state/products/product.actions';
 
 @Component({
   selector: 'app-add-product-form',
   templateUrl: './add-product-form.component.html',
   styleUrls: ['./add-product-form.component.scss'],
 })
-export class AddProductFormComponent {
+export class AddProductFormComponent implements OnInit, OnDestroy {
   detailsForm = this.fb.nonNullable.group({
     name: ['', Validators.required],
     category: ['', Validators.required],
@@ -19,11 +22,33 @@ export class AddProductFormComponent {
     description: ['', Validators.required],
   });
 
+  addProductSuccessSubscription = new Subscription();
+  addProductErrorSubscription = new Subscription();
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private productService: ProductService
+    private store: Store<AppState>,
+    private actions: Actions
   ) {}
+
+  ngOnInit(): void {
+    this.addProductSuccessSubscription = this.actions
+      .pipe(ofType(addProductSuccess))
+      .subscribe(({ product }) => {
+        alert(`Added product with id=${product.id}!`);
+        this.router.navigateByUrl('/products');
+      });
+
+    this.addProductErrorSubscription = this.actions
+      .pipe(ofType(addProductError))
+      .subscribe(() => alert('Failed to add product!'));
+  }
+
+  ngOnDestroy(): void {
+    this.addProductSuccessSubscription.unsubscribe();
+    this.addProductErrorSubscription.unsubscribe();
+  }
 
   addProduct(): void {
     const product: Product = {
@@ -35,18 +60,7 @@ export class AddProductFormComponent {
       description: this.detailsForm.value.description ?? '',
     };
 
-    this.productService
-      .addProduct(product)
-      .pipe(take(1))
-      .subscribe({
-        next: (product) => {
-          alert(`Successfully added product with id=${product.id}`);
-          this.router.navigateByUrl('/products');
-        },
-        error: () => {
-          alert('Failed to add product');
-        },
-      });
+    this.store.dispatch(addProduct({ product }));
   }
 
   cancel(): void {
