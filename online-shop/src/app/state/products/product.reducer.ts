@@ -121,18 +121,18 @@ export const productReducer = createReducer(
 
   // Shopping cart
   on(addProductToCart, (state, { productId }) => {
-    const initialLength = state.orders.length;
+    let foundProduct = false;
 
     const orders = state.orders.map((order) => {
       if (order.productId === productId) {
+        foundProduct = true;
         return { productId, quantity: order.quantity + 1 };
       } else {
         return order;
       }
     });
 
-    // No order with the productId was found
-    if (orders.length == initialLength) {
+    if (!foundProduct) {
       orders.push({ productId, quantity: 1 });
     }
 
