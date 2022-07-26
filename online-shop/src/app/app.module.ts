@@ -17,6 +17,13 @@ import { productReducer } from './state/products/product.reducer';
 import { ProductEffects } from './state/products/product.effects';
 import { loginReducer } from './state/login/login.reducer';
 import { LoginEffects } from './state/login/login.effects';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableModule } from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -36,6 +43,14 @@ import { LoginEffects } from './state/login/login.effects';
     ReactiveFormsModule,
     StoreModule.forRoot({ login: loginReducer, products: productReducer }),
     EffectsModule.forRoot([LoginEffects, ProductEffects]),
+    BrowserAnimationsModule,
+
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatTableModule,
+    MatToolbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -16,7 +16,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
 
   orders$ = this.store.select(selectOrders);
   loggedInUser$ = this.store.select(selectLoggedInUser);
- 
+
   loggedInUserSubscription = new Subscription();
 
   constructor(private store: Store<AppState>) {}
@@ -26,7 +26,7 @@ export class ShoppingCartComponent implements OnInit, OnDestroy {
       this.canCheckout = user?.roles.includes('customer') ?? false;
     });
   }
-  
+
   ngOnDestroy(): void {
     this.loggedInUserSubscription.unsubscribe();
   }

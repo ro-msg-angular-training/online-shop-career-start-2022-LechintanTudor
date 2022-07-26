@@ -1,4 +1,4 @@
-<div id="container">
+<!-- <div id="container">
   <h1 id="title">Products</h1>
   <button id="add-product-button" [disabled]="!canEditProducts" (click)="goToAddProductForm()">
     Add product
@@ -25,4 +25,60 @@
       </tr>
     </tbody>
   </table>
-</div>
+</div> -->
+<mat-card>
+  <mat-card-title>Products</mat-card-title>
+  <mat-card-content>
+    <table #productTable mat-table [dataSource]="products">
+      <!-- Id -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef>Id</th>
+        <td mat-cell *matCellDef="let product">{{ product.id }}</td>
+      </ng-container>
+
+      <!-- Name -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let product">{{ product.name }}</td>
+      </ng-container>
+
+      <!-- Category -->
+      <ng-container matColumnDef="category">
+        <th mat-header-cell *matHeaderCellDef>Category</th>
+        <td mat-cell *matCellDef="let product">{{ product.category }}</td>
+      </ng-container>
+
+      <!-- Price -->
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Price</th>
+        <td mat-cell *matCellDef="let product">{{ product.price }}</td>
+      </ng-container>
+
+      <!-- Details -->
+      <ng-container matColumnDef="details">
+        <th mat-header-cell *matHeaderCellDef>Details</th>
+        <td mat-cell *matCellDef="let product">
+          <button mat-raised-button routerLink="/products/{{ product.id }}">Details</button>
+        </td>
+      </ng-container>
+
+      <!-- Delete -->
+      <ng-container matColumnDef="delete">
+        <th mat-header-cell *matHeaderCellDef>Delete</th>
+        <td mat-cell *matCellDef="let product">
+          <button
+            mat-raised-button
+            color="warn"
+            [disabled]="!canEditProducts"
+            (click)="deleteProduct(product.id)"
+          >
+            Delete
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+      <tr mat-row *matRowDef="let rowData; columns: columnsToDisplay"></tr>
+    </table>
+  </mat-card-content>
+</mat-card>
