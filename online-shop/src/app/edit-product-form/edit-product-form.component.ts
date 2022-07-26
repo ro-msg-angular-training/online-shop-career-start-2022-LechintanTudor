@@ -45,7 +45,7 @@ export class EditProductFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.selectedProductSubscription = this.selectedProduct$.subscribe((product) => {
-      if (product !== null) {
+      if (product) {
         this.detailsForm.patchValue(product);
       }
     });

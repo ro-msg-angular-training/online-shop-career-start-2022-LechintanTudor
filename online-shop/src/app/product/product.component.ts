@@ -35,12 +35,12 @@ export class ProductComponent implements OnInit, OnDestroy {
     this.store.dispatch(getProduct({ productId }));
 
     this.selectedProductSubscription = this.selectedProduct$.subscribe((product) => {
-      if (product !== null) {
+      if (product) {
         this.product = product;
       }
     });
     this.loggedInUserSubscription = this.loggedInUser$.subscribe((user) => {
-      if (user !== null) {
+      if (user) {
         this.canEditProduct = user.roles.includes('admin');
         this.canAddToCart = user.roles.includes('customer');
       }
