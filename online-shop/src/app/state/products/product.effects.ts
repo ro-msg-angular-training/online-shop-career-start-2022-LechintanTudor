@@ -1,22 +1,48 @@
 import { Injectable } from '@angular/core';
 import { ProductService } from 'src/app/services/product.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import * as ProductActions from './product.actions';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { catchError, map, mergeMap, of, withLatestFrom } from 'rxjs';
+import { AppState } from '../app.state';
+import { Store } from '@ngrx/store';
+import { selectLoggedInUser } from '../login/login.selectors';
+import { selectOrders } from './product.selectors';
+import {
+  addProduct,
+  addProductSuccess,
+  checkoutCart,
+  checkoutCartError,
+  checkoutCartSuccess,
+  deleteProduct,
+  deleteProductError,
+  deleteProductSuccess,
+  getProduct,
+  getProductError,
+  getProducts,
+  getProductsError,
+  getProductsSuccess,
+  getProductSuccess,
+  updateProduct,
+  updateProductError,
+  updateProductSuccess,
+} from './product.actions';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductEffects {
-  constructor(private actions$: Actions, private productService: ProductService) {}
+  constructor(
+    private store: Store<AppState>,
+    private actions$: Actions,
+    private productService: ProductService
+  ) {}
 
   addProduct$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(ProductActions.addProduct),
+      ofType(addProduct),
       mergeMap(({ product }) => {
         return this.productService.addProduct(product).pipe(
-          map((product) => ProductActions.addProductSuccess({ product })),
-          catchError(() => of(ProductActions.getProductError()))
+          map((product) => addProductSuccess({ product })),
+          catchError(() => of(getProductError()))
         );
       })
     );
@@ -24,11 +50,11 @@ export class ProductEffects {
 
   getProduct$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(ProductActions.getProduct),
+      ofType(getProduct),
       mergeMap(({ productId }) => {
         return this.productService.getProduct(productId).pipe(
-          map((product) => ProductActions.getProductSuccess({ product })),
-          catchError(() => of(ProductActions.getProductError()))
+          map((product) => getProductSuccess({ product })),
+          catchError(() => of(getProductError()))
         );
       })
     );
@@ -36,11 +62,11 @@ export class ProductEffects {
 
   getProducts$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(ProductActions.getProducts),
+      ofType(getProducts),
       mergeMap(() => {
         return this.productService.getProducts().pipe(
-          map((products) => ProductActions.getProductsSuccess({ products })),
-          catchError(() => of(ProductActions.getProductsError()))
+          map((products) => getProductsSuccess({ products })),
+          catchError(() => of(getProductsError()))
         );
       })
     );
@@ -48,11 +74,11 @@ export class ProductEffects {
 
   updateProduct$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(ProductActions.updateProduct),
+      ofType(updateProduct),
       mergeMap(({ product }) => {
         return this.productService.updateProduct(product).pipe(
-          map(() => ProductActions.updateProductSuccess({ product })),
-          catchError(() => of(ProductActions.updateProductError()))
+          map(() => updateProductSuccess({ product })),
+          catchError(() => of(updateProductError()))
         );
       })
     );
@@ -60,11 +86,28 @@ export class ProductEffects {
 
   deleteProduct$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(ProductActions.deleteProduct),
+      ofType(deleteProduct),
       mergeMap(({ productId }) => {
         return this.productService.deleteProduct(productId).pipe(
-          map(() => ProductActions.deleteProductSuccess({ productId })),
-          catchError(() => of(ProductActions.deleteProductError()))
+          map(() => deleteProductSuccess({ productId })),
+          catchError(() => of(deleteProductError()))
+        );
+      })
+    );
+  });
+
+  checkoutCart$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(checkoutCart),
+      withLatestFrom(this.store.select(selectLoggedInUser), this.store.select(selectOrders)),
+      mergeMap(([_, user, orders]) => {
+        if (user === null) {
+          return of(checkoutCartError());
+        }
+
+        return this.productService.checkout(user.username, orders).pipe(
+          map(() => checkoutCartSuccess()),
+          catchError(() => of(checkoutCartError()))
         );
       })
     );

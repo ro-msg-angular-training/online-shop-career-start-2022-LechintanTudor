@@ -1,97 +1,153 @@
 import { createReducer, on } from '@ngrx/store';
+import { Order } from 'src/app/data/order';
 import { Product } from 'src/app/data/product';
 import { LoadingStatus } from '../common';
-import * as ProductActions from './product.actions';
+import {
+  addProduct,
+  addProductError,
+  addProductSuccess,
+  addProductToCart,
+  checkoutCart,
+  checkoutCartSuccess,
+  deleteProduct,
+  deleteProductError,
+  deleteProductSuccess,
+  getProduct,
+  getProductError,
+  getProducts,
+  getProductsError,
+  getProductsSuccess,
+  getProductSuccess,
+  updateProduct,
+  updateProductError,
+  updateProductSuccess,
+} from './product.actions';
 
 export interface ProductState {
   status: LoadingStatus;
   products: Product[];
   selectedProduct: Product | null;
+  orders: Order[];
+  checkoutStatus: LoadingStatus;
 }
 
 const initialState: ProductState = {
   status: 'initial',
   products: [],
   selectedProduct: null,
+  orders: [],
+  checkoutStatus: 'initial',
 };
 
 export const productReducer = createReducer(
   initialState,
 
   // Add product
-  on(ProductActions.addProduct, (state) => ({
+  on(addProduct, (state) => ({
     ...state,
     status: 'loading',
   })),
-  on(ProductActions.addProductSuccess, (state, { product }) => ({
+  on(addProductSuccess, (state, { product }) => ({
     ...state,
     status: 'loading',
     products: [...state.products, product],
   })),
-  on(ProductActions.addProductError, (state) => ({
+  on(addProductError, (state) => ({
     ...state,
     status: 'error',
   })),
 
   // Get product
-  on(ProductActions.getProduct, (state) => ({
+  on(getProduct, (state) => ({
     ...state,
     status: 'loading',
   })),
-  on(ProductActions.getProductSuccess, (state, { product }) => ({
+  on(getProductSuccess, (state, { product }) => ({
     ...state,
     status: 'ready',
     selectedProduct: product,
   })),
-  on(ProductActions.getProductError, (state) => ({
+  on(getProductError, (state) => ({
     ...state,
     status: 'error',
   })),
 
   // Get products
-  on(ProductActions.getProducts, (state) => ({
+  on(getProducts, (state) => ({
     ...state,
     status: 'loading',
   })),
-  on(ProductActions.getProductsSuccess, (state, { products }) => ({
+  on(getProductsSuccess, (state, { products }) => ({
     ...state,
     status: 'ready',
     products,
   })),
-  on(ProductActions.getProductsError, (state) => ({
+  on(getProductsError, (state) => ({
     ...state,
     status: 'error',
   })),
 
   // Update product
-  on(ProductActions.updateProduct, (state) => ({
+  on(updateProduct, (state) => ({
     ...state,
     status: 'loading',
   })),
-  on(ProductActions.updateProductSuccess, (state, { product }) => ({
+  on(updateProductSuccess, (state, { product }) => ({
     ...state,
     status: 'ready',
     products: state.products.map((oldProduct) => {
       return oldProduct.id === product.id ? product : oldProduct;
     }),
   })),
-  on(ProductActions.updateProductError, (state) => ({
+  on(updateProductError, (state) => ({
     ...state,
     status: 'error',
   })),
 
   // Delete product
-  on(ProductActions.deleteProduct, (state) => ({
+  on(deleteProduct, (state) => ({
     ...state,
     status: 'loading',
   })),
-  on(ProductActions.deleteProductSuccess, (state, { productId }) => ({
+  on(deleteProductSuccess, (state, { productId }) => ({
     ...state,
     status: 'ready',
     products: state.products.filter((product) => product.id !== productId),
   })),
-  on(ProductActions.deleteProductError, (state) => ({
+  on(deleteProductError, (state) => ({
     ...state,
     status: 'error',
+  })),
+
+  // Shopping cart
+  on(addProductToCart, (state, { productId }) => {
+    const initialLength = state.orders.length;
+
+    const orders = state.orders.map((order) => {
+      if (order.productId === productId) {
+        return { productId, quantity: order.quantity + 1 };
+      } else {
+        return order;
+      }
+    });
+
+    // No order with the productId was found
+    if (orders.length == initialLength) {
+      orders.push({ productId, quantity: 1 });
+    }
+
+    return { ...state, orders };
+  }),
+  on(checkoutCart, (state) => ({
+    ...state,
+    checkoutStatus: 'loading',
+  })),
+  on(checkoutCartSuccess, (state) => ({
+    ...state,
+    checkoutStatus: 'ready',
+  })),
+  on(addProductError, (state) => ({
+    ...state,
+    checkoutStatus: 'error',
   }))
 );

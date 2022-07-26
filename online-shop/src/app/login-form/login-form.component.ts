@@ -6,8 +6,8 @@ import { Store } from '@ngrx/store';
 import { Subscription, withLatestFrom } from 'rxjs';
 import { Credentials } from '../data/user';
 import { AppState } from '../state/app.state';
-import * as LoginActions from '../state/login/login.actions';
-import * as LoginSelectors from '../state/login/login.selectors';
+import { login, loginError, loginSuccess } from '../state/login/login.actions';
+import { selectRedirectUrl } from '../state/login/login.selectors';
 
 @Component({
   selector: 'app-login-form',
@@ -32,17 +32,14 @@ export class LoginFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.loginSuccessSubscription = this.actions
-      .pipe(
-        ofType(LoginActions.loginSuccess),
-        withLatestFrom(this.store.select(LoginSelectors.selectRedirectUrl))
-      )
+      .pipe(ofType(loginSuccess), withLatestFrom(this.store.select(selectRedirectUrl)))
       .subscribe(([_, redirectUrl]) => {
         console.log(redirectUrl);
         this.router.navigateByUrl(redirectUrl);
       });
 
     this.loginErrorSubscription = this.actions
-      .pipe(ofType(LoginActions.loginError))
+      .pipe(ofType(loginError))
       .subscribe(() => alert('Failed to log in!'));
   }
 
@@ -56,6 +53,6 @@ export class LoginFormComponent implements OnInit, OnDestroy {
     const password = this.loginForm.value.password ?? '';
     const credentials: Credentials = { username, password };
 
-    this.store.dispatch(LoginActions.login({ credentials }));
+    this.store.dispatch(login({ credentials }));
   }
 }

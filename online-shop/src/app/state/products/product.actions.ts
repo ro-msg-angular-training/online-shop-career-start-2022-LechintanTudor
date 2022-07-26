@@ -77,3 +77,22 @@ export const deleteProductSuccess = createAction(
 );
 
 export const deleteProductError = createAction('[API] Delete Product Error');
+
+////////////////////////////////////////////////////////////////////////////////
+// Add product to cart
+////////////////////////////////////////////////////////////////////////////////
+
+export const addProductToCart = createAction(
+  '[Shopping Cart] Add Product to Cart',
+  props<{ productId: number }>()
+);
+
+////////////////////////////////////////////////////////////////////////////////
+// Add product to cart
+////////////////////////////////////////////////////////////////////////////////
+
+export const checkoutCart = createAction('[Shopping Cart] Checkout Cart');
+
+export const checkoutCartSuccess = createAction('[API] Checkout Cart Success');
+
+export const checkoutCartError = createAction('[API] Checkout Cart Erorr');

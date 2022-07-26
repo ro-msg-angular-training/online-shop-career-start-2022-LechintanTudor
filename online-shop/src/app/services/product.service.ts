@@ -9,8 +9,6 @@ import { API_BASE_URL } from './common';
   providedIn: 'root',
 })
 export class ProductService {
-  orders: Order[] = [];
-
   constructor(private http: HttpClient) {}
 
   addProduct(product: Product): Observable<Product> {
@@ -33,22 +31,8 @@ export class ProductService {
     return this.http.delete<void>(`${API_BASE_URL}/products/${id}`);
   }
 
-  addToCart(productId: number): void {
-    const order = this.orders.find((order) => order.productId === productId);
-
-    if (order !== undefined) {
-      order.quantity += 1;
-    } else {
-      this.orders.push({ productId, quantity: 1 });
-    }
-  }
-
-  getOrders(): Order[] {
-    return this.orders;
-  }
-
-  checkout(): Observable<void> {
-    const data = { customer: 'doej', products: this.orders };
+  checkout(username: string, orders: Order[]): Observable<void> {
+    const data = { customer: username, products: orders };
 
     return this.http
       .post(`${API_BASE_URL}/orders`, data, {

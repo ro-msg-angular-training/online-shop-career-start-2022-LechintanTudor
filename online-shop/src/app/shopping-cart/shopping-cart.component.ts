@@ -1,29 +1,37 @@
-import { Component, OnInit } from '@angular/core';
-import { take } from 'rxjs';
-import { Order } from '../data/order';
-import { AuthService } from '../services/auth.service';
-import { ProductService } from '../services/product.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import { AppState } from '../state/app.state';
+import { selectLoggedInUser } from '../state/login/login.selectors';
+import { checkoutCart } from '../state/products/product.actions';
+import { selectOrders } from '../state/products/product.selectors';
 
 @Component({
   selector: 'app-shopping-cart',
   templateUrl: './shopping-cart.component.html',
   styleUrls: ['./shopping-cart.component.scss'],
 })
-export class ShoppingCartComponent implements OnInit {
-  orders: Order[] = [];
+export class ShoppingCartComponent implements OnInit, OnDestroy {
   canCheckout = false;
 
-  constructor(private productService: ProductService, private authService: AuthService) {}
+  orders$ = this.store.select(selectOrders);
+  loggedInUser$ = this.store.select(selectLoggedInUser);
+ 
+  loggedInUserSubscription = new Subscription();
+
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.orders = this.productService.getOrders();
-    // this.canCheckout = this.orders.length !== 0 && this.authService.userHasRole('customer');
+    this.loggedInUserSubscription = this.loggedInUser$.subscribe((user) => {
+      this.canCheckout = user?.roles.includes('customer') ?? false;
+    });
+  }
+  
+  ngOnDestroy(): void {
+    this.loggedInUserSubscription.unsubscribe();
   }
 
   checkout(): void {
-    this.productService
-      .checkout()
-      .pipe(take(1))
-      .subscribe(() => alert('Completed checkout!'));
+    this.store.dispatch(checkoutCart());
   }
 }

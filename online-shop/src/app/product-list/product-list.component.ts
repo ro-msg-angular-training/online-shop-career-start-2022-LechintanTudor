@@ -1,29 +1,37 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AuthService } from '../services/auth.service';
+import { Subscription } from 'rxjs';
 import { AppState } from '../state/app.state';
-import * as ProductActions from '../state/products/product.actions';
-import * as ProductSelectors from '../state/products/product.selectors';
+import { selectLoggedInUser } from '../state/login/login.selectors';
+import { deleteProduct, getProducts } from '../state/products/product.actions';
+import { selectProducts } from '../state/products/product.selectors';
 
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
-export class ProductListComponent implements OnInit {
-  products$ = this.store.select(ProductSelectors.selectProducts);
+export class ProductListComponent implements OnInit, OnDestroy {
   canEditProducts = false;
 
-  constructor(
-    private router: Router,
-    private authService: AuthService,
-    private store: Store<AppState>
-  ) {}
+  products$ = this.store.select(selectProducts);
+  loggedInUser$ = this.store.select(selectLoggedInUser);
+
+  loggedInUserSubscription = new Subscription();
+
+  constructor(private router: Router, private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.store.dispatch(ProductActions.getProducts());
-    // this.canEditProducts = this.authService.userHasRole('admin');
+    this.loggedInUserSubscription = this.loggedInUser$.subscribe((user) => {
+      this.canEditProducts = user?.roles.includes('admin') ?? false;
+    });
+
+    this.store.dispatch(getProducts());
+  }
+
+  ngOnDestroy(): void {
+    this.loggedInUserSubscription.unsubscribe();
   }
 
   goToAddProductForm(): void {
@@ -31,6 +39,6 @@ export class ProductListComponent implements OnInit {
   }
 
   deleteProduct(productId: number): void {
-    this.store.dispatch(ProductActions.deleteProduct({ productId }));
+    this.store.dispatch(deleteProduct({ productId }));
   }
 }

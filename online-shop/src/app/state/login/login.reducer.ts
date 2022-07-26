@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { User } from 'src/app/data/user';
 import { LoadingStatus } from '../common';
-import * as LoginActions from '../login/login.actions';
+import { login, loginError, loginSuccess, setRedirectUrl } from './login.actions';
 
 export interface LoginState {
   status: LoadingStatus;
@@ -19,22 +19,22 @@ export const loginReducer = createReducer(
   initialState,
 
   // Login
-  on(LoginActions.login, (state) => ({
+  on(login, (state) => ({
     ...state,
     status: 'loading',
   })),
-  on(LoginActions.loginSuccess, (state, { user }) => ({
+  on(loginSuccess, (state, { user }) => ({
     ...state,
     status: 'ready',
     user,
   })),
-  on(LoginActions.loginError, (state) => ({
+  on(loginError, (state) => ({
     ...state,
     status: 'error',
   })),
 
   // Redirect url
-  on(LoginActions.setRedirectUrl, (state, { redirectUrl }) => ({
+  on(setRedirectUrl, (state, { redirectUrl }) => ({
     ...state,
     redirectUrl,
   }))

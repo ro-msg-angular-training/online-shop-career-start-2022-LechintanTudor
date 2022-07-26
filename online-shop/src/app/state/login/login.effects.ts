@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { catchError, map, mergeMap, of } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
-import * as LoginActions from './login.actions';
+import { login, loginError, loginSuccess } from './login.actions';
 
 @Injectable()
 export class LoginEffects {
@@ -10,11 +10,11 @@ export class LoginEffects {
 
   login$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(LoginActions.login),
+      ofType(login),
       mergeMap(({ credentials }) => {
         return this.authService.login(credentials).pipe(
-          map((user) => LoginActions.loginSuccess({ user })),
-          catchError(() => of(LoginActions.loginError()))
+          map((user) => loginSuccess({ user })),
+          catchError(() => of(loginError()))
         );
       })
     );

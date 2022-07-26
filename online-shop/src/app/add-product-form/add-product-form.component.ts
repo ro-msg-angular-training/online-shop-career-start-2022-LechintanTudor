@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Product } from '../data/product';
 import { AppState } from '../state/app.state';
-import * as ProductActions from '../state/products/product.actions';
+import { addProduct, addProductError, addProductSuccess } from '../state/products/product.actions';
 
 @Component({
   selector: 'app-add-product-form',
@@ -34,14 +34,14 @@ export class AddProductFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.addProductSuccessSubscription = this.actions
-      .pipe(ofType(ProductActions.addProductSuccess))
+      .pipe(ofType(addProductSuccess))
       .subscribe(({ product }) => {
         alert(`Added product with id=${product.id}!`);
         this.router.navigateByUrl('/products');
       });
 
     this.addProductErrorSubscription = this.actions
-      .pipe(ofType(ProductActions.addProductError))
+      .pipe(ofType(addProductError))
       .subscribe(() => alert('Failed to add product!'));
   }
 
@@ -60,7 +60,7 @@ export class AddProductFormComponent implements OnInit, OnDestroy {
       description: this.detailsForm.value.description ?? '',
     };
 
-    this.store.dispatch(ProductActions.addProduct({ product }));
+    this.store.dispatch(addProduct({ product }));
   }
 
   cancel(): void {

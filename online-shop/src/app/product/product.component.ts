@@ -1,54 +1,67 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { take } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 import { Product } from '../data/product';
-import { ProductService } from '../services/product.service';
+import { AppState } from '../state/app.state';
+import { selectLoggedInUser } from '../state/login/login.selectors';
+import { addProductToCart, getProduct } from '../state/products/product.actions';
+import { selectSelectedProduct } from '../state/products/product.selectors';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.scss'],
 })
-export class ProductComponent implements OnInit {
-  product: Product = {
-    id: 0,
-    name: '-----',
-    category: '-----',
-    price: 0,
-    image: '',
-    description: '-----',
-  };
-
+export class ProductComponent implements OnInit, OnDestroy {
+  product: Product = { id: -1, name: '', category: '', price: 0, image: '', description: '' };
   canEditProduct = false;
   canAddToCart = false;
 
+  selectedProduct$ = this.store.select(selectSelectedProduct);
+  loggedInUser$ = this.store.select(selectLoggedInUser);
+
+  selectedProductSubscription = new Subscription();
+  loggedInUserSubscription = new Subscription();
+
   constructor(
+    private store: Store<AppState>,
     private router: Router,
-    private route: ActivatedRoute,
-    private productService: ProductService
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.getProduct();
+    const productId = parseInt(this.route.snapshot.paramMap.get('id') ?? '', 10);
+    this.store.dispatch(getProduct({ productId }));
+
+    this.selectedProductSubscription = this.selectedProduct$.subscribe((product) => {
+      if (product !== null) {
+        this.product = product;
+      }
+    });
+    this.loggedInUserSubscription = this.loggedInUser$.subscribe((user) => {
+      if (user !== null) {
+        this.canEditProduct = user.roles.includes('admin');
+        this.canAddToCart = user.roles.includes('customer');
+      }
+    });
   }
 
-  getProduct(): void {
-    const id = parseInt(this.route.snapshot.paramMap.get('id') ?? '', 10);
-
-    this.productService
-      .getProduct(id)
-      .pipe(take(1))
-      .subscribe((product) => {
-        this.product = product;
-      });
+  ngOnDestroy(): void {
+    this.selectedProductSubscription.unsubscribe();
+    this.loggedInUserSubscription.unsubscribe();
   }
 
   editProduct(): void {
-    this.router.navigate(['/edit-product', this.product.id]);
+    if (this.product.id !== -1) {
+      this.router.navigate(['/edit-product', this.product.id]);
+    }
   }
 
   addToCart(): void {
-    this.productService.addToCart(this.product.id);
-    alert('Product added to cart');
+    if (this.product.id !== -1) {
+      this.store.dispatch(addProductToCart({ productId: this.product.id }));
+      alert('Product added to cart');
+    }
   }
 }

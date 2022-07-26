@@ -9,3 +9,5 @@ export const selectSelectedProduct = createSelector(
   selectProductState,
   (state) => state.selectedProduct
 );
+
+export const selectOrders = createSelector(selectProductState, (state) => state.orders);

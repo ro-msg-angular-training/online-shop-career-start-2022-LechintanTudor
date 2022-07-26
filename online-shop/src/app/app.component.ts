@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from './state/app.state';
-import * as LoginActions from './state/login/login.actions';
+import { setRedirectUrl } from './state/login/login.actions';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +12,6 @@ export class AppComponent {
   constructor(private store: Store<AppState>) {}
 
   resetRedirectUrl(): void {
-    this.store.dispatch(LoginActions.setRedirectUrl({ redirectUrl: '/' }));
+    this.store.dispatch(setRedirectUrl({ redirectUrl: '/' }));
   }
 }

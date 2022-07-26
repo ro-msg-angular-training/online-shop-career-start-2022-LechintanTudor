@@ -6,8 +6,13 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { Product } from '../data/product';
 import { AppState } from '../state/app.state';
-import * as ProductActions from '../state/products/product.actions';
-import * as ProductSelectors from '../state/products/product.selectors';
+import {
+  getProduct,
+  updateProduct,
+  updateProductError,
+  updateProductSuccess,
+} from '../state/products/product.actions';
+import { selectSelectedProduct } from '../state/products/product.selectors';
 
 @Component({
   selector: 'app-edit-product-form',
@@ -24,7 +29,8 @@ export class EditProductFormComponent implements OnInit, OnDestroy {
     description: ['', Validators.required],
   });
 
-  selectedProduct$ = this.store.select(ProductSelectors.selectSelectedProduct);
+  selectedProduct$ = this.store.select(selectSelectedProduct);
+
   selectedProductSubscription: Subscription = new Subscription();
   updateProductSuccessSubscription: Subscription = new Subscription();
   updateProductErrorSubscription: Subscription = new Subscription();
@@ -45,18 +51,18 @@ export class EditProductFormComponent implements OnInit, OnDestroy {
     });
 
     this.updateProductSuccessSubscription = this.actions
-      .pipe(ofType(ProductActions.updateProductSuccess))
+      .pipe(ofType(updateProductSuccess))
       .subscribe(() => {
         alert('Product updated successfully!');
         this.router.navigateByUrl('/products');
       });
 
     this.updateProductErrorSubscription = this.actions
-      .pipe(ofType(ProductActions.updateProductError))
+      .pipe(ofType(updateProductError))
       .subscribe(() => alert('Failed to update product!'));
 
     this.productId = parseInt(this.route.snapshot.paramMap.get('id') ?? '', 10);
-    this.store.dispatch(ProductActions.getProduct({ productId: this.productId }));
+    this.store.dispatch(getProduct({ productId: this.productId }));
   }
 
   ngOnDestroy(): void {
@@ -75,7 +81,7 @@ export class EditProductFormComponent implements OnInit, OnDestroy {
       description: this.detailsForm.value.description ?? '',
     };
 
-    this.store.dispatch(ProductActions.updateProduct({ product }));
+    this.store.dispatch(updateProduct({ product }));
   }
 
   cancelEdits(): void {
